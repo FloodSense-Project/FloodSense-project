@@ -50,13 +50,11 @@ ALTER TABLE public.usuario ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.ocorrencia ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.imagem ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.analise_ia ENABLE ROW LEVEL SECURITY;
-ALTER TABLE public.encaminhamento ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.envio_ocorrencia ENABLE ROW LEVEL SECURITY;
 REVOKE ALL ON TABLE public.envio_ocorrencia FROM anon, authenticated;
 GRANT ALL ON TABLE public.envio_ocorrencia TO service_role;
 GRANT USAGE ON SCHEMA public TO authenticated, service_role;
 GRANT SELECT, INSERT ON public.usuario, public.ocorrencia, public.imagem, public.analise_ia TO authenticated;
-GRANT SELECT ON public.encaminhamento TO authenticated;
 GRANT USAGE, SELECT ON SEQUENCE public.ocorrencia_id_ocorrencia_seq,
     public.imagem_id_imagem_seq, public.analise_ia_id_analise_seq TO authenticated;
 
@@ -111,11 +109,5 @@ CREATE POLICY "usuarios_visualizam_proprias_analises" ON "public"."analise_ia" A
 USING ((EXISTS ( SELECT 1
    FROM ocorrencia o
   WHERE ((o.id_ocorrencia = analise_ia.id_ocorrencia) AND (o.id_usuario = ( SELECT auth.uid() AS uid))))));
-
-DROP POLICY IF EXISTS "usuarios_visualizam_proprios_encaminhamentos" ON "public"."encaminhamento";
-CREATE POLICY "usuarios_visualizam_proprios_encaminhamentos" ON "public"."encaminhamento" AS PERMISSIVE FOR SELECT TO authenticated
-USING ((EXISTS ( SELECT 1
-   FROM ocorrencia o
-  WHERE ((o.id_ocorrencia = encaminhamento.id_ocorrencia) AND (o.id_usuario = ( SELECT auth.uid() AS uid))))));
 
 COMMIT;
