@@ -325,16 +325,25 @@ class _OccurrenceFormPageState extends State<OccurrenceFormPage> {
         resultadoIA = jsonDecode(res.data as String);
       }
 
-      bool fotoAprovadaPelaIA = resultadoIA['ehAlagamento'] ?? false;
-      String categoriaIdentificada = resultadoIA['categoria'] ?? 'inconclusivo';
+      final String categoriaIdentificada =
+        resultadoIA['categoria'] ?? 'inconclusivo';
 
-      // 3. SE NÃO FOR ALAGAMENTO, BARRA O REGISTRO
+      final bool fotoAprovadaPelaIA = const [
+        'alagamento',
+        'buraco',
+        'entulho',
+        'poste apagado',
+        'outro problema urbano',
+      ].contains(categoriaIdentificada);
+
+      // 3. CONFERE SE A IA IDENTIFICOU UM PROBLEMA URBANO
       if (!fotoAprovadaPelaIA) {
         if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(
               content: Text(
-                'Não conseguimos identificar uma enchente nesta foto. Por favor, tente tirar uma foto mais clara do alagamento.',
+                'Não foi possível identificar um problema urbano '
+                'nesta foto. Envie uma imagem mais clara do local.',
               ),
               backgroundColor: Colors.red,
               duration: Duration(seconds: 5),
@@ -401,27 +410,61 @@ class _OccurrenceFormPageState extends State<OccurrenceFormPage> {
         final encaminhada =
         await _encaminharOcorrencia(idOcorrenciaGerado);
 
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-          content: Text(
-            encaminhada
-            ? 'Ocorrência encaminhada ao órgão responsável.'
-            : 'Ocorrência registrada. A confirmação do encaminhamento '
-              'está pendente. Confira antes de repetir o envio.',
-         ),
-           backgroundColor: encaminhada ? Colors.green : Colors.orange,
-           duration: const Duration(seconds: 8),
-         ),
-        );
+            if (mounted) {
         _descriptionController.clear();
         _locationController.clear();
+
         setState(() {
           _capturedImage = null;
           _posicaoAtual = null;
         });
-      }
 
+        await showDialog<void>(
+          context: context,
+          barrierDismissible: false,
+          builder: (dialogContext) => PopScope(
+            canPop: false,
+            child: AlertDialog(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(24),
+              ),
+              icon: Icon(
+                encaminhada
+                    ? Icons.check_circle_rounded
+                    : Icons.info_rounded,
+                color: encaminhada ? Colors.green : Colors.orange,
+                size: 72,
+              ),
+              title: Text(
+                encaminhada
+                    ? 'Ocorrência enviada!'
+                    : 'Ocorrência registrada',
+                textAlign: TextAlign.center,
+              ),
+              content: Text(
+                encaminhada
+                    ? 'Sua ocorrência foi encaminhada ao órgão '
+                        'responsável.\n\n'
+                        'Acompanhe o status em “Minhas ocorrências”.'
+                    : 'Sua ocorrência foi salva, mas a confirmação '
+                        'do encaminhamento está pendente.\n\n'
+                        'Confira o status antes de repetir o envio.',
+                textAlign: TextAlign.center,
+                style: const TextStyle(fontSize: 16, height: 1.5),
+              ),
+              actionsAlignment: MainAxisAlignment.center,
+              actions: [
+                FilledButton(
+                  onPressed: () {
+                    Navigator.of(dialogContext).pop();
+                  },
+                  child: const Text('Entendi'),
+                ),
+              ],
+            ),
+          ),
+        );
+      }
     } catch (erro) {
           debugPrint('ERRO AO REGISTRAR OCORRENCIA: $erro');
         if (mounted) {
