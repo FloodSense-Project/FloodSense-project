@@ -112,7 +112,7 @@ O controle `envio_ocorrencia` evita reenvio automático do mesmo registro. Se o 
 
 ## Estado da validação
 
-A compilação web foi concluída no ambiente de desenvolvimento. A instalação em um projeto Supabase vazio e a entrega completa do e-mail ainda precisam ser verificadas com o roteiro acima.
+A compilação web e o fluxo de registro de ocorrência foram testados no ambiente de desenvolvimento com o Supabase atual. O teste confirmou a análise da imagem, o registro da ocorrência e o recebimento do e-mail completo. A instalação em um projeto Supabase vazio ainda precisa ser validada.
 
 O teste padrão de contador em `app_floodsense/test/widget_test.dart` ainda precisa ser adaptado ao aplicativo. Há avisos do analisador sobre nomes de arquivos Dart. A execução em Android e iOS precisa de configuração e testes próprios, incluindo permissões nativas de câmera, fotos e localização.
 
