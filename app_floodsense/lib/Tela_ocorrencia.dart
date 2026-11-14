@@ -1,0 +1,431 @@
+import 'package:flutter/material.dart';
+import 'Tela_ocorrenciaTeste.dart';
+import 'Tela_minhas_ocorrencias.dart';
+import 'Tela_mapa.dart';
+
+class TelaOcorrencia extends StatelessWidget {
+  const TelaOcorrencia({super.key});
+
+  static const Color azulEscuro = Color(0xFF064A98);
+
+  static const Color azulClaro = Color(0xFFE8F7FF);
+
+  static const Color laranja = Color(0xFFFF8A22);
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: azulClaro,
+
+      body: SafeArea(
+        child: Stack(
+          children: [
+            // FUNDO DECORATIVO - CÍRCULO AZUL ESQUERDO
+
+            Positioned(
+              top: -100,
+
+              left: -100,
+
+              child: Container(
+                width: 300,
+
+                height: 300,
+
+                decoration: const BoxDecoration(
+                  color: Color(0xFF0875C9),
+
+                  shape: BoxShape.circle,
+                ),
+              ),
+            ),
+
+            // FUNDO DECORATIVO - CÍRCULO SUPERIOR DIREITO
+            Positioned(
+              top: -50,
+
+              right: -100,
+
+              child: Container(
+                width: 280,
+
+                height: 280,
+
+                decoration: const BoxDecoration(
+                  color: Color(0xFFB9E9FF),
+
+                  shape: BoxShape.circle,
+                ),
+              ),
+            ),
+
+            // FUNDO DECORATIVO - CÍRCULO INFERIOR
+            Positioned(
+              bottom: -120,
+
+              right: -80,
+
+              child: Container(
+                width: 350,
+
+                height: 350,
+
+                decoration: const BoxDecoration(
+                  color: Color(0xFF80D8F7),
+
+                  shape: BoxShape.circle,
+                ),
+              ),
+            ),
+
+            // LINHA LARANJA DECORATIVA
+            Positioned(
+              top: 25,
+
+              left: 0,
+
+              child: Container(
+                width: 150,
+
+                height: 5,
+
+                decoration: const BoxDecoration(
+                  color: laranja,
+
+                  borderRadius: BorderRadius.horizontal(
+                    right: Radius.circular(10),
+                  ),
+                ),
+              ),
+            ),
+
+            // CONTEÚDO PRINCIPAL
+            SingleChildScrollView(
+              padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 20),
+
+              child: Column(
+                children: [
+                  const SizedBox(height: 10),
+
+                  // LOGO
+                  Image.asset(
+                    'lib/assets/logo_floodsense.png',
+                    width: 60,
+                    height: 60,
+                    fit: BoxFit.contain,
+                  ),
+
+                  const Text(
+                    'FloodSense',
+
+                    style: TextStyle(
+                      color: azulEscuro,
+
+                      fontSize: 36,
+
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+
+                  const Text(
+                    'Tecnologia para prevenir e proteger vidas.',
+
+                    textAlign: TextAlign.center,
+
+                    style: TextStyle(
+                      color: azulEscuro,
+
+                      fontSize: 15,
+
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+
+                  const SizedBox(height: 45),
+
+                  // SAUDAÇÃO
+                  const Align(
+                    alignment: Alignment.centerLeft,
+
+                    child: Text(
+                      'Olá, Usuário! 👋',
+
+                      style: TextStyle(
+                        color: azulEscuro,
+
+                        fontSize: 32,
+
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+
+                  const SizedBox(height: 5),
+
+                  const Align(
+                    alignment: Alignment.centerLeft,
+
+                    child: Text(
+                      'O que deseja fazer hoje?',
+
+                      style: TextStyle(color: Color(0xFF53627A), fontSize: 21),
+                    ),
+                  ),
+
+                  const SizedBox(height: 30),
+
+                  // REGISTRAR OCORRÊNCIA
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const OccurrenceFormPage(),
+                        ),
+                      );
+                    },
+                    child: Container(
+                      width: double.infinity,
+                      padding: const EdgeInsets.symmetric(
+                        vertical: 45,
+                        horizontal: 28,
+                      ), // EdgeInsets.symmetric
+                      decoration: BoxDecoration(
+                        gradient: const LinearGradient(
+                          colors: [Color.fromARGB(230, 255, 163, 42), Color.fromARGB(244, 255, 104, 16)],
+                        ), // LinearGradient
+                        borderRadius: BorderRadius.circular(30),
+                        boxShadow: [
+                          BoxShadow(
+                            color: const Color.fromARGB(255, 0, 0, 0).withValues(alpha: 0.25),
+                            blurRadius: 12,
+                            offset: const Offset(0, 6),
+                          ), // BoxShadow
+                        ],
+                      ), // BoxDecoration
+                      child: Row(
+                        children: [
+                          const Icon(
+                            Icons.add_a_photo_outlined,
+                            color: Color.fromARGB(255, 255, 255, 255),
+                            size: 50,
+                          ),
+                          const SizedBox(width: 20),
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                const Text(
+                                  'Registrar\nocorrência',
+                                  style: TextStyle(
+                                    color: Color.fromARGB(255, 255, 255, 255),
+                                    fontSize: 25,
+                                    fontWeight: FontWeight.bold,
+                                    height: 1.2,
+                                  ),
+                                ),
+                                const SizedBox(height: 6),
+                                Text(
+                                  'Envie fotos, descreva o problema e ajude a sua cidade',
+                                  style: TextStyle(
+                                    color: const Color.fromARGB(255, 255, 255, 255),
+                                    fontSize: 13,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          const SizedBox(width: 8),
+                          const Icon(
+                            Icons.arrow_forward,
+                            color: Color.fromARGB(255, 255, 255, 255),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+
+                  const SizedBox(height: 22),
+
+                  // MINHAS OCORRÊNCIAS
+                  GestureDetector(
+                       onTap: () {
+                   Navigator.push(
+                      context,
+                  MaterialPageRoute(
+                      builder: (_) => const TelaMinhasOcorrencias(),
+      ),
+    );
+  },
+                child: const CardMenu(
+                icone: Icons.assignment_outlined,
+                titulo: 'Minhas ocorrências',
+                descricao: 'Veja as ocorrências que você enviou.',
+    ),
+),
+
+                  const SizedBox(height: 18),
+
+                  // MAPA
+                  GestureDetector(
+                  onTap: () {
+                  Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                  builder: (_) => const TelaMapa(),
+                  ),
+                 );
+                },
+                  child: const CardMenu(
+                  icone: Icons.location_on_outlined,
+                  titulo: 'Mapa',
+                  descricao: 'Veja suas ocorrências\nno mapa.',
+                 ),
+                ),
+
+                  const SizedBox(height: 45),
+
+                  // PARTE INFERIOR
+                  Container(
+                    width: double.infinity,
+
+                    padding: const EdgeInsets.all(25),
+
+                    decoration: BoxDecoration(
+                      color: azulEscuro,
+
+                      borderRadius: BorderRadius.circular(30),
+                    ),
+
+                    child: const Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+
+                      children: [
+                        SizedBox(
+                          width: 60,
+
+                          child: Divider(color: laranja, thickness: 5),
+                        ),
+
+                        SizedBox(height: 8),
+
+                        Text(
+                          'Cidades mais seguras,\n'
+                          'pessoas mais protegidas.',
+
+                          style: TextStyle(color: Colors.white, fontSize: 18),
+                        ),
+                      ],
+                    ),
+                  ),
+
+                  const SizedBox(height: 20),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+// CARD DAS OPÇÕES
+
+class CardMenu extends StatelessWidget {
+  final IconData icone;
+
+  final String titulo;
+
+  final String descricao;
+
+  const CardMenu({
+    super.key,
+
+    required this.icone,
+
+    required this.titulo,
+
+    required this.descricao,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: double.infinity,
+
+      padding: const EdgeInsets.symmetric(horizontal: 22, vertical: 22),
+
+      decoration: BoxDecoration(
+        color: Colors.white.withValues(alpha: 0.92),
+
+        borderRadius: BorderRadius.circular(25),
+
+        boxShadow: [
+          BoxShadow(
+            color: Colors.blue.withValues(alpha: 0.10),
+
+            blurRadius: 12,
+
+            offset: const Offset(0, 5),
+          ),
+        ],
+      ),
+
+      child: Row(
+        children: [
+          Container(
+            width: 70,
+
+            height: 70,
+
+            decoration: const BoxDecoration(
+              color: Color(0xFFDDF3FF),
+
+              shape: BoxShape.circle,
+            ),
+
+            child: Icon(icone, color: const Color(0xFF064A98), size: 40),
+          ),
+
+          const SizedBox(width: 20),
+
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+
+              children: [
+                Text(
+                  titulo,
+
+                  style: const TextStyle(
+                    color: Color(0xFF064A98),
+
+                    fontSize: 22,
+
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+
+                const SizedBox(height: 5),
+
+                Text(
+                  descricao,
+
+                  style: const TextStyle(
+                    color: Color(0xFF53627A),
+
+                    fontSize: 16,
+                  ),
+                ),
+              ],
+            ),
+          ),
+
+          const Icon(Icons.arrow_forward, color: Color(0xFF064A98), size: 30),
+        ],
+      ),
+    );
+  }
+}
