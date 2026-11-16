@@ -1,0 +1,63 @@
+name: Publicar FloodSense
+
+on:
+  push:
+    branches:
+      - tiago/banco-supabase
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: github-pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Baixar codigo
+        uses: actions/checkout@v6
+
+      - name: Configurar Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          flutter-version: '3.47.9'
+          cache: true
+
+      - name: Configurar GitHub Pages
+        id: pages
+        uses: actions/configure-pages@v5
+
+      - name: Baixar dependencias
+        working-directory: app_floodsense
+        run: flutter pub get
+
+      - name: Compilar aplicativo web
+        working-directory: app_floodsense
+        env:
+          BASE_PATH: ${{ steps.pages.outputs.base_path }}
+        run: flutter build web --release --base-href "${BASE_PATH}/"
+
+      - name: Preparar publicacao
+        uses: actions/upload-pages-artifact@v4
+        with:
+          path: app_floodsense/build/web
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    steps:
+      - name: Publicar aplicativo
+        id: deployment
+        uses: actions/deploy-pages@v4
