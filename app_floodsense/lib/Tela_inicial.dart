@@ -50,7 +50,7 @@ Future<void> _solicitarRecuperacao() async {
   try {
     await Supabase.instance.client.auth.resetPasswordForEmail(
       email,
-      redirectTo: 'http://localhost:8080/',
+      redirectTo: 'https://floodsense-project.pages.dev/',
     );
 
     if (!mounted) return;
